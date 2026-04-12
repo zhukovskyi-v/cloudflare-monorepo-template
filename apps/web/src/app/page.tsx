@@ -355,7 +355,7 @@ export default function Home() {
             </section>
 
             {/* Stack */}
-            <section className="border-t border-white/[0.06]">
+            <section className="border-t border-white/6">
                 <div className="mx-auto max-w-6xl px-6 py-24 text-center sm:py-32">
                     <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                         Built on the modern stack
