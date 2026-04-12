@@ -36,8 +36,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
-/infra/dev/terraform.tfvars
-/infra/dev/.terraform.lock.hcl
-/infra/dev/.terraform/
-/infra/dev/terraform.tfstate
-/infra/dev/terraform.tfstate.backup
+/infra/envs/dev/terraform.tfvars
+/infra/envs/dev/.terraform.lock.hcl
+/infra/envs/dev/.terraform/
+/infra/envs/dev/terraform.tfstate
+/infra/envs/dev/terraform.tfstate.backup
+/apps/api/worker-configuration.d.ts
+/apps/api/wrangler.jsonc

@@ -104,7 +104,7 @@ resource "cloudflare_worker_version" "api_worker_version" {
   modules = [{
     name         = "index.js"
     content_type = "application/javascript+module"
-    content_file = "${path.module}/../../apps/api/dist/index.js"
+    content_file = "${path.module}/../../../apps/api/dist/index.js"
   }]
 
   placement = {
@@ -118,7 +118,7 @@ resource "cloudflare_worker_version" "api_worker_version" {
 
   bindings = [
     {
-      name = "DBS"
+      name = "MAIN_API_SQL_DB"
       id   = cloudflare_d1_database.api_sql_db.id
       type = "d1"
     },
@@ -128,7 +128,7 @@ resource "cloudflare_worker_version" "api_worker_version" {
       type         = "kv_namespace"
     },
     {
-      name = "MY_ENV_VAR1"
+      name = "MY_ENV_VAR2"
       text = "some_value"
       type = "plain_text"
     }

@@ -4,13 +4,21 @@
   "scripts": {
     "build": "wrangler build",
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "env": "set -a && source .env && set +a",
+    "deploy": "set -a && source .env && set +a && wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "setup": "bash scripts/generate-wrangler-config.sh",
+    "drizzle:generate": "drizzle-kit generate",
+    "migrate:local": "yes | wrangler d1 migrations apply main_api_sql_db",
+    "migrate:remote": "set -a && source .env && set +a && yes | wrangler d1 migrations apply main_api_sql_db --remote"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "drizzle-orm": "^0.45.2",
     "hono": "^4.12.12"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.10",
     "wrangler": "^4.4.0"
   }
 }
