@@ -1,57 +1,63 @@
 import js from "@eslint/js";
-import { globalIgnores } from "eslint/config";
+import {globalIgnores} from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
+import perfectionist from 'eslint-plugin-perfectionist'
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginReact from "eslint-plugin-react";
 import globals from "globals";
 import pluginNext from "@next/eslint-plugin-next";
-import { config as baseConfig } from "./base.js";
+import {config as baseConfig} from "./base.js";
 
 /**
  * A custom ESLint configuration for libraries that use Next.js.
  *
- * @type {import("eslint").Linter.Config[]}
+ * @type {[...import("eslint").Linter.Config[],{readonly rules: Readonly<Linter.RulesRecord>},{rules: Record<string, 0 | "off">},...CompatibleConfig[],ConfigObject<RulesConfig>,{plugins?: {react: typeof plugin}, rules?: RulesConfig, languageOptions: {parserOptions?: JavaScriptParserOptionsConfig, globals: {readonly AbortController: false, readonly AbortPaymentEvent: false, readonly AbortSignal: false, readonly addEventListener: false, readonly ai: false, readonly AI: false, readonly AICreateMonitor: false, readonly AsyncDisposableStack: false, readonly atob: false, readonly BackgroundFetchEvent: false, readonly BackgroundFetchManager: false, readonly BackgroundFetchRecord: false, readonly BackgroundFetchRegistration: false, readonly BackgroundFetchUpdateUIEvent: false, readonly BarcodeDetector: false, readonly Blob: false, readonly BroadcastChannel: false, readonly btoa: false, readonly ByteLengthQueuingStrategy: false, readonly Cache: false, readonly caches: false, readonly CacheStorage: false, readonly CanMakePaymentEvent: false, readonly CanvasGradient: false, readonly CanvasPattern: false, readonly clearInterval: false, readonly clearTimeout: false, readonly Client: false, readonly clients: false, readonly Clients: false, readonly CloseEvent: false, readonly CompressionStream: false, readonly console: false, readonly cookieStore: false, readonly CookieStore: false, readonly CookieStoreManager: false, readonly CountQueuingStrategy: false, readonly createImageBitmap: false, readonly CreateMonitor: false, readonly CropTarget: false, readonly crossOriginIsolated: false, readonly crypto: false, readonly Crypto: false, readonly CryptoKey: false, readonly CSSSkewX: false, readonly CSSSkewY: false, readonly CustomEvent: false, readonly DecompressionStream: false, readonly dispatchEvent: false, readonly DisposableStack: false, readonly DOMException: false, readonly DOMMatrix: false, readonly DOMMatrixReadOnly: false, readonly DOMPoint: false, readonly DOMPointReadOnly: false, readonly DOMQuad: false, readonly DOMRect: false, readonly DOMRectReadOnly: false, readonly DOMStringList: false, readonly ErrorEvent: false, readonly Event: false, readonly EventSource: false, readonly EventTarget: false, readonly ExtendableCookieChangeEvent: false, readonly ExtendableEvent: false, readonly ExtendableMessageEvent: false, readonly fetch: false, readonly FetchEvent: false, readonly File: false, readonly FileList: false, readonly FileReader: false, readonly FileSystemDirectoryHandle: false, readonly FileSystemFileHandle: false, readonly FileSystemHandle: false, readonly FileSystemWritableFileStream: false, readonly FontFace: false, readonly fonts: false, readonly FormData: false, readonly GPU: false, readonly GPUAdapter: false, readonly GPUAdapterInfo: false, readonly GPUBindGroup: false, readonly GPUBindGroupLayout: false, readonly GPUBuffer: false, readonly GPUBufferUsage: false, readonly GPUCanvasContext: false, readonly GPUColorWrite: false, readonly GPUCommandBuffer: false, readonly GPUCommandEncoder: false, readonly GPUCompilationInfo: false, readonly GPUCompilationMessage: false, readonly GPUComputePassEncoder: false, readonly GPUComputePipeline: false, readonly GPUDevice: false, readonly GPUDeviceLostInfo: false, readonly GPUError: false, readonly GPUExternalTexture: false, readonly GPUInternalError: false, readonly GPUMapMode: false, readonly GPUOutOfMemoryError: false, readonly GPUPipelineError: false, readonly GPUPipelineLayout: false, readonly GPUQuerySet: false, readonly GPUQueue: false, readonly GPURenderBundle: false, readonly GPURenderBundleEncoder: false, readonly GPURenderPassEncoder: false, readonly GPURenderPipeline: false, readonly GPUSampler: false, readonly GPUShaderModule: false, readonly GPUShaderStage: false, readonly GPUSupportedFeatures: false, readonly GPUSupportedLimits: false, readonly GPUTexture: false, readonly GPUTextureUsage: false, readonly GPUTextureView: false, readonly GPUUncapturedErrorEvent: false, readonly GPUValidationError: false, readonly Headers: false, readonly IDBCursor: false, readonly IDBCursorWithValue: false, readonly IDBDatabase: false, readonly IDBFactory: false, readonly IDBIndex: false, readonly IDBKeyRange: false, readonly IDBObjectStore: false, readonly IDBOpenDBRequest: false, readonly IDBRecord: false, readonly IDBRequest: false, readonly IDBTransaction: false, readonly IDBVersionChangeEvent: false, readonly ImageBitmap: false, readonly ImageBitmapRenderingContext: false, readonly ImageData: false, readonly importScripts: false, readonly indexedDB: false, readonly InstallEvent: false, readonly isSecureContext: false, readonly LanguageDetector: false, readonly location: false, readonly Lock: false, readonly LockManager: false, readonly MediaCapabilities: false, readonly MessageChannel: false, readonly MessageEvent: false, readonly MessagePort: false, readonly NavigationPreloadManager: false, readonly navigator: false, readonly NavigatorUAData: false, readonly NetworkInformation: false, readonly Notification: false, readonly NotificationEvent: false, readonly Observable: false, readonly OffscreenCanvas: false, readonly OffscreenCanvasRenderingContext2D: false, readonly onabortpayment: true, readonly onactivate: true, readonly onbackgroundfetchabort: true, readonly onbackgroundfetchclick: true, readonly onbackgroundfetchfail: true, readonly onbackgroundfetchsuccess: true, readonly oncanmakepayment: true, readonly oncookiechange: true, readonly onerror: true, readonly onfetch: true, readonly oninstall: true, readonly onlanguagechange: true, readonly onmessage: true, readonly onmessageerror: true, readonly onnotificationclick: true, readonly onnotificationclose: true, readonly onpaymentrequest: true, readonly onperiodicsync: true, readonly onpush: true, readonly onpushsubscriptionchange: true, readonly onrejectionhandled: true, readonly onsync: true, readonly onunhandledrejection: true, readonly origin: false, readonly Path2D: false, readonly PaymentRequestEvent: false, readonly performance: false, readonly Performance: false, readonly PerformanceEntry: false, readonly PerformanceMark: false, readonly PerformanceMeasure: false, readonly PerformanceObserver: false, readonly PerformanceObserverEntryList: false, readonly PerformanceResourceTiming: false, readonly PerformanceServerTiming: false, readonly PeriodicSyncEvent: false, readonly PeriodicSyncManager: false, readonly Permissions: false, readonly PermissionStatus: false, readonly PromiseRejectionEvent: false, readonly PushEvent: false, readonly PushManager: false, readonly PushMessageData: false, readonly PushSubscription: false, readonly PushSubscriptionChangeEvent: false, readonly PushSubscriptionOptions: false, readonly queueMicrotask: false, readonly QuotaExceededError: false, readonly ReadableByteStreamController: false, readonly ReadableStream: false, readonly ReadableStreamBYOBReader: false, readonly ReadableStreamBYOBRequest: false, readonly ReadableStreamDefaultController: false, readonly ReadableStreamDefaultReader: false, readonly registration: false, readonly removeEventListener: false, readonly ReportBody: false, readonly reportError: false, readonly ReportingObserver: false, readonly Request: false, readonly Response: false, readonly RestrictionTarget: false, readonly scheduler: false, readonly Scheduler: false, readonly SecurityPolicyViolationEvent: false, readonly self: false, readonly serviceWorker: false, readonly ServiceWorker: false, readonly ServiceWorkerGlobalScope: false, readonly ServiceWorkerRegistration: false, readonly setInterval: false, readonly setTimeout: false, readonly skipWaiting: false, readonly StorageBucket: false, readonly StorageBucketManager: false, readonly StorageManager: false, readonly structuredClone: false, readonly Subscriber: false, readonly SubtleCrypto: false, readonly SuppressedError: false, readonly SyncEvent: false, readonly SyncManager: false, readonly TaskController: false, readonly TaskPriorityChangeEvent: false, readonly TaskSignal: false, readonly TextDecoder: false, readonly TextDecoderStream: false, readonly TextEncoder: false, readonly TextEncoderStream: false, readonly TextMetrics: false, readonly TransformStream: false, readonly TransformStreamDefaultController: false, readonly TrustedHTML: false, readonly TrustedScript: false, readonly TrustedScriptURL: false, readonly TrustedTypePolicy: false, readonly TrustedTypePolicyFactory: false, readonly trustedTypes: false, readonly URL: false, readonly URLPattern: false, readonly URLSearchParams: false, readonly UserActivation: false, readonly WebAssembly: false, readonly WebGL2RenderingContext: false, readonly WebGLActiveInfo: false, readonly WebGLBuffer: false, readonly WebGLContextEvent: false, readonly WebGLFramebuffer: false, readonly WebGLObject: false, readonly WebGLProgram: false, readonly WebGLQuery: false, readonly WebGLRenderbuffer: false, readonly WebGLRenderingContext: false, readonly WebGLSampler: false, readonly WebGLShader: false, readonly WebGLShaderPrecisionFormat: false, readonly WebGLSync: false, readonly WebGLTexture: false, readonly WebGLTransformFeedback: false, readonly WebGLUniformLocation: false, readonly WebGLVertexArrayObject: false, readonly WebSocket: false, readonly WebSocketError: false, readonly WebSocketStream: false, readonly WebTransport: false, readonly WebTransportBidirectionalStream: false, readonly WebTransportDatagramDuplexStream: false, readonly WebTransportError: false, readonly WGSLLanguageFeatures: false, readonly when: false, readonly WindowClient: false, readonly WorkerGlobalScope: false, readonly WorkerLocation: false, readonly WorkerNavigator: false, readonly WritableStream: false, readonly WritableStreamDefaultController: false, readonly WritableStreamDefaultWriter: false}}},{plugins: {"@next/next": {meta: {name: string}; rules: {"google-font-display": Rule.RuleModule; "google-font-preconnect": Rule.RuleModule; "inline-script-id": Rule.RuleModule; "next-script-for-ga": Rule.RuleModule; "no-assign-module-variable": Rule.RuleModule; "no-async-client-component": Rule.RuleModule; "no-before-interactive-script-outside-document": Rule.RuleModule; "no-css-tags": Rule.RuleModule; "no-document-import-in-page": Rule.RuleModule; "no-duplicate-head": Rule.RuleModule; "no-head-element": Rule.RuleModule; "no-head-import-in-document": Rule.RuleModule; "no-html-link-for-pages": Rule.RuleModule; "no-img-element": Rule.RuleModule; "no-page-custom-font": Rule.RuleModule; "no-script-component-in-head": Rule.RuleModule; "no-styled-jsx-in-document": Rule.RuleModule; "no-sync-scripts": Rule.RuleModule; "no-title-in-document-head": Rule.RuleModule; "no-typos": Rule.RuleModule; "no-unwanted-polyfillio": Rule.RuleModule}; configs: ESLintPluginConfigs}}, rules: {[p: string]: RulesConfig[string] | undefined, "perfectionist/sort-imports": [string,{type: string}], "perfectionist/sort-objects": [string,{type: string}], "sort-array-includes": [string,{type: string, order: string, fallbackSort: {type: string, order: string}}], "perfectionist/sort-interfaces": [string]}},null]}
  * */
-export const nextJsConfig = [
-  ...baseConfig,
-  js.configs.recommended,
-  eslintConfigPrettier,
-  ...tseslint.configs.recommended,
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-  {
-    ...pluginReact.configs.flat.recommended,
-    languageOptions: {
-      ...pluginReact.configs.flat.recommended.languageOptions,
-      globals: {
-        ...globals.serviceworker,
-      },
+export const nextJsConfig = [...baseConfig, js.configs.recommended, eslintConfigPrettier, ...tseslint.configs.recommended, globalIgnores([// Default ignores of eslint-config-next:
+    ".next/**", "out/**", "build/**", "next-env.d.ts",]), {
+    ...pluginReact.configs.flat.recommended, languageOptions: {
+        ...pluginReact.configs.flat.recommended.languageOptions, globals: {
+            ...globals.serviceworker,
+        },
     },
-  },
-  {
+}, {
     plugins: {
-      "@next/next": pluginNext,
+        "@next/next": pluginNext,
+    }, rules: {
+        ...pluginNext.configs.recommended.rules, ...pluginNext.configs["core-web-vitals"].rules,
+        'perfectionist/sort-imports': ['error', {
+            type: 'alphabetical',
+        }],
+        'perfectionist/sort-objects': ['error', {
+            type: 'alphabetical',
+        }],
+        'sort-array-includes': ['warn', {
+            type: 'line-length',
+            order: 'desc',
+            fallbackSort: {type: 'alphabetical', order: 'asc'}
+        }],
+        'sort-exports': ['warn', {
+            type: 'line-length',
+            order: 'desc',
+            fallbackSort: {type: 'alphabetical', order: 'asc'}
+        }],
+        'sort-named-imports': ['warn', {
+            type: 'line-length',
+            order: 'desc',
+            fallbackSort: {type: 'alphabetical', order: 'asc'}
+        }],
+        'perfectionist/sort-interfaces': ['error'],
     },
-    rules: {
-      ...pluginNext.configs.recommended.rules,
-      ...pluginNext.configs["core-web-vitals"].rules,
-    },
-  },
-  {
+}, {
     plugins: {
-      "react-hooks": pluginReactHooks,
+        "react-hooks": pluginReactHooks, perfectionist
+    }, settings: {react: {version: "detect"}}, rules: {
+        ...pluginReactHooks.configs.recommended.rules, // React scope no longer necessary with new JSX transform.
+        "react/react-in-jsx-scope": "off",
+        perfectionist: {
+            type: 'line-length',
+            partitionByComment: true,
+        },
     },
-    settings: { react: { version: "detect" } },
-    rules: {
-      ...pluginReactHooks.configs.recommended.rules,
-      // React scope no longer necessary with new JSX transform.
-      "react/react-in-jsx-scope": "off",
-    },
-  },
-];
+},];
