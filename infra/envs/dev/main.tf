@@ -100,7 +100,8 @@ resource "cloudflare_worker_version" "api_worker_version" {
   worker_id  = cloudflare_worker.api_worker.id
 
   main_module = "index.js"
-
+  compatibility_flags = ["nodejs_compat"]
+  compatibility_date = "2026-01-01"
   modules = [{
     name         = "index.js"
     content_type = "application/javascript+module"
@@ -148,9 +149,8 @@ resource "cloudflare_workers_deployment" "api_deployment" {
 
 resource "cloudflare_workers_custom_domain" "api_workers_custom_domain" {
   account_id  = var.account_id
-  hostname    = "api.temp-email-dev.v-share.cfd"
+  hostname    = var.api_custom_domain
   service     = cloudflare_worker.api_worker.name
   zone_id     = var.main_domain_zone_id
-  environment = "production"
-  count = var.main_domain_zone_id != null && var.main_domain_zone_id != "" ? 1 : 0
+  count       = var.main_domain_zone_id != null && var.main_domain_zone_id != "" && var.api_custom_domain != null && var.api_custom_domain != "" ? 1 : 0
 }
