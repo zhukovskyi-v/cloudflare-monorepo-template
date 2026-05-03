@@ -1,13 +1,13 @@
 import {usersContract} from '@repo/contracts';
-import {authMiddleware, implement, type Context} from '@/lib/orpc';
+import {implement, type Context} from '@/lib/orpc';
+import { authMiddleware } from "@/middleware/auth.middleware";
 
 const base = implement(usersContract).$context<Context>();
 const priv = base.use(authMiddleware);
 
 export const usersRouter = {
-    getUser: priv.getUser.handler(async ({input, context}) => {
-        const id = input.id ?? context.user.id;
-        return {text: `Hello, ${id} from private greeting procedure!`};
+    getUser: priv.getUser.handler(async ({input}) => {
+        return {text: `Hello, ${input.id} from private greeting procedure!`};
     }),
 
     registerUser: base.registerUser.handler(async ({input}) => {

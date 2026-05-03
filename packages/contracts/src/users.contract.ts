@@ -15,7 +15,7 @@ export const registerUserOutput = z.object({
 });
 
 export const getUserInput = z.object({
-    id: z.string().optional(),
+    id: z.string(),
 });
 
 export const getUserOutput = z.object({
@@ -28,8 +28,18 @@ export type GetUserInput = z.infer<typeof getUserInput>;
 export type GetUserOutput = z.infer<typeof getUserOutput>;
 
 export const usersContract = {
-    registerUser: oc.input(registerUserInput).output(registerUserOutput),
-    getUser: oc.input(getUserInput).output(getUserOutput),
+    registerUser: oc
+        .route({
+            method: 'POST', path: '/users', successStatus: 201
+        })
+        .input(registerUserInput)
+        .output(registerUserOutput),
+    getUser: oc
+        .route({
+            method: 'GET', path: '/users/{id}'
+        })
+        .input(getUserInput)
+        .output(getUserOutput),
 } as const;
 
 export type UsersContract = typeof usersContract;

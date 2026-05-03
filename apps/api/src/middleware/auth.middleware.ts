@@ -1,5 +1,5 @@
 import {ORPCError, os} from '@orpc/server';
-import type {Context} from './context';
+import type {Context} from '@/lib/context';
 
 export type AuthUser = {
     id: string;
