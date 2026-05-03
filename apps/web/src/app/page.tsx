@@ -141,7 +141,7 @@ const steps = [
 
 const githubUrl = `https://github.com/zhukovskyi-v/cloudflare-monorepo-template`
 
-export default function Home() {
+export default async function Home() {
     return (
         <div className="min-h-dvh bg-[#0a0a0a] text-[#fafafa]">
             {/* Nav */}
@@ -299,7 +299,7 @@ export default function Home() {
                                 className="group rounded-xl border border-white/6 bg-white/2 p-6 transition-all duration-300 hover:border-white/12 hover:bg-white/4"
                             >
                                 <div
-                                    className="mb-4 flex size-10 items-center justify-center rounded-lg border border-white/8 bg-white/4 text-orange-400 transition-colors duration-300 group-hover:border-orange-500/20 group-hover:bg-orange-500/[0.08]">
+                                    className="mb-4 flex size-10 items-center justify-center rounded-lg border border-white/8 bg-white/4 text-orange-400 transition-colors duration-300 group-hover:border-orange-500/20 group-hover:bg-orange-500/8">
                                     {feature.icon}
                                 </div>
                                 <h3 className="mb-2 text-sm font-semibold text-[#eee]">
