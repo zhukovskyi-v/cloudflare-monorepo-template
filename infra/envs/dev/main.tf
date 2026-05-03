@@ -76,9 +76,16 @@ resource "cloudflare_workers_kv_namespace" "api_workers_kv_namespace" {
   }
 }
 
+locals {
+  api_worker_name = "api-worker-dev"
+  web_worker_name = "dev-web-next-app"
+  api_url = var.api_custom_domain != null && var.api_custom_domain != "" ? "https://${var.api_custom_domain}" : "https://${cloudflare_worker.api_worker.name}.${data.external.workers_subdomain.result.subdomain}.workers.dev"
+  web_url = var.web_custom_domain != null && var.web_custom_domain != "" ? "https://${var.web_custom_domain}" : "https://${local.web_worker_name}.${data.external.workers_subdomain.result.subdomain}.workers.dev"
+}
+
 resource "cloudflare_worker" "api_worker" {
   account_id = var.account_id
-  name       = "api-worker-dev" # replace with your desired worker name
+  name       = local.api_worker_name
   observability = {
     enabled            = true
     head_sampling_rate = 1
@@ -129,8 +136,8 @@ resource "cloudflare_worker_version" "api_worker_version" {
       type         = "kv_namespace"
     },
     {
-      name = "MY_ENV_VAR2"
-      text = "some_value"
+      name = "ALLOWED_ORIGINS"
+      text = local.web_url
       type = "plain_text"
     }
   ]
@@ -155,10 +162,6 @@ resource "cloudflare_workers_custom_domain" "api_workers_custom_domain" {
   count      = var.main_domain_zone_id != null && var.main_domain_zone_id != "" && var.api_custom_domain != null && var.api_custom_domain != "" ? 1 : 0
 }
 
-locals {
-  api_url = var.api_custom_domain != null && var.api_custom_domain != "" ? "https://${var.api_custom_domain}" : "https://${cloudflare_worker.api_worker.name}.${data.external.workers_subdomain.result.subdomain}.workers.dev"
-}
-
 module "web" {
   source = "../../modules/cloudflare-next-app"
 
@@ -171,7 +174,7 @@ module "web" {
   workers_subdomain    = data.external.workers_subdomain.result.subdomain
 
   env_vars = {
-    NEXT_PUBLIC_SERVER_URL = local.api_url
+    NEXT_PUBLIC_SERVER_URL = local.api_url,
   }
 
   custom_domain = var.web_custom_domain
