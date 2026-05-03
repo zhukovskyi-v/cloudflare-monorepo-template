@@ -19,3 +19,9 @@ variable "api_custom_domain" {
   description = "Custom domain hostname for the API worker (from environment: TF_VAR_api_custom_domain)"
   default     = null
 }
+
+variable "web_custom_domain" {
+  type        = string
+  description = "Custom domain hostname for the web (Next.js) worker (from environment: TF_VAR_web_custom_domain)"
+  default     = null
+}
