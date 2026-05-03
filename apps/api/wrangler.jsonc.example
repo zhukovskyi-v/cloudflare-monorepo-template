@@ -16,7 +16,7 @@
     "nodejs_compat"
   ],
    "vars": {
-     "MY_VAR": "my-variable"
+     "ALLOWED_ORIGINS": "<ALLOWED_ORIGINS>"
    },
    "kv_namespaces": [
      {

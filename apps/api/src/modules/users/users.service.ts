@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import type { DrizzleD1Database } from 'drizzle-orm/d1'
-import * as schema from '../../database/schema'
 import { faker } from '@faker-js/faker'
+import * as schema from '../../database/schema'
 
 type DB = DrizzleD1Database<typeof schema>
 

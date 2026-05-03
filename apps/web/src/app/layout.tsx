@@ -1,9 +1,10 @@
 import type {Metadata} from "next";
 import "./globals.css";
-import { Inter } from "next/font/google";
-import { cn } from "@/lib/utils";
+import {Inter} from "next/font/google";
+import {cn} from "@/lib/utils";
+import {Providers} from "@/app/providers";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({subsets: ['latin'], variable: '--font-sans'});
 
 export const metadata: Metadata = {
     title: "Cloudflare Stack Template — Next.js, TypeScript API & Terraform",
@@ -19,7 +20,9 @@ export default function RootLayout({
     return (
         <html lang="en" className={cn("font-sans antialiased", inter.variable)}>
         <body className="bg-[#0a0a0a]">
-        {children}
+        <Providers>
+            {children}
+        </Providers>
         </body>
         </html>
     );

@@ -21,7 +21,7 @@ source "$ENV_FILE"
 set +a
 
 # Validate required vars
-for var in CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_D1_DATABASE_ID CLOUDFLARE_KV_NAMESPACE_ID JWT_SECRET; do
+for var in CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_D1_DATABASE_ID CLOUDFLARE_KV_NAMESPACE_ID ALLOWED_ORIGINS; do
   if [ -z "${!var:-}" ]; then
     echo "Error: $var is not set in .env"
     exit 1
@@ -29,10 +29,23 @@ for var in CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_D1_DATABASE_ID CLOUDFLARE_KV_NAMESPA
 done
 
 # Generate wrangler.jsonc from the example template
+# Escape values that may contain '/' or '&' so sed substitution doesn't fail.
+escape_for_sed() {
+  # Escape '/', '&' and '|' which we may use as a delimiter below
+  printf '%s' "$1" | sed -e 's/[\/&|]/\\&/g'
+}
+
+escaped_account_id=$(escape_for_sed "$CLOUDFLARE_ACCOUNT_ID")
+escaped_db_id=$(escape_for_sed "$CLOUDFLARE_D1_DATABASE_ID")
+escaped_kv_id=$(escape_for_sed "$CLOUDFLARE_KV_NAMESPACE_ID")
+escaped_allowed_origins=$(escape_for_sed "$ALLOWED_ORIGINS")
+
+# Use '|' as the sed delimiter to avoid conflicts with '/' in URLs
 sed \
-  -e "s/<CLOUDFLARE_ACCOUNT_ID>/$CLOUDFLARE_ACCOUNT_ID/" \
-  -e "s/<D1_DATABASE_ID>/$CLOUDFLARE_D1_DATABASE_ID/" \
-  -e "s/<KV_NAMESPACE_ID>/$CLOUDFLARE_KV_NAMESPACE_ID/" \
+  -e "s|<CLOUDFLARE_ACCOUNT_ID>|$escaped_account_id|g" \
+  -e "s|<D1_DATABASE_ID>|$escaped_db_id|g" \
+  -e "s|<KV_NAMESPACE_ID>|$escaped_kv_id|g" \
+  -e "s|<ALLOWED_ORIGINS>|$escaped_allowed_origins|g" \
   "$API_DIR/wrangler.jsonc.example" > "$API_DIR/wrangler.jsonc"
 
 echo "Generated wrangler.jsonc with:"

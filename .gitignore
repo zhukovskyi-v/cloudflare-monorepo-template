@@ -43,3 +43,4 @@ yarn-error.log*
 /infra/envs/dev/terraform.tfstate.backup
 /apps/api/worker-configuration.d.ts
 /apps/api/wrangler.jsonc
+tsconfig.tsbuildinfo

@@ -3,6 +3,8 @@
   "type": "module",
   "scripts": {
     "build": "wrangler build",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "wrangler dev",
     "env": "set -a && source .env && set +a",
     "deploy": "set -a && source .env && set +a && wrangler deploy --minify",
@@ -15,8 +17,9 @@
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
     "@hono/zod-validator": "^0.7.6",
+    "@repo/contracts": "*",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.12.12",
+    "hono": "4.12.14",
     "zod": "^4.3.6"
   },
   "devDependencies": {
