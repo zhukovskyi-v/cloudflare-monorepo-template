@@ -76,9 +76,16 @@ resource "cloudflare_workers_kv_namespace" "api_workers_kv_namespace" {
   }
 }
 
+locals {
+  api_worker_name = "api-worker-dev"
+  web_worker_name = "dev-web-next-app"
+  api_url = var.api_custom_domain != null && var.api_custom_domain != "" ? "https://${var.api_custom_domain}" : "https://${cloudflare_worker.api_worker.name}.${data.external.workers_subdomain.result.subdomain}.workers.dev"
+  web_url = var.web_custom_domain != null && var.web_custom_domain != "" ? "https://${var.web_custom_domain}" : "https://${local.web_worker_name}.${data.external.workers_subdomain.result.subdomain}.workers.dev"
+}
+
 resource "cloudflare_worker" "api_worker" {
   account_id = var.account_id
-  name       = "api-worker-dev" # replace with your desired worker name
+  name       = local.api_worker_name
   observability = {
     enabled            = true
     head_sampling_rate = 1
@@ -99,9 +106,9 @@ resource "cloudflare_worker_version" "api_worker_version" {
   account_id = var.account_id
   worker_id  = cloudflare_worker.api_worker.id
 
-  main_module = "index.js"
+  main_module         = "index.js"
   compatibility_flags = ["nodejs_compat"]
-  compatibility_date = "2026-01-01"
+  compatibility_date  = "2026-01-01"
   modules = [{
     name         = "index.js"
     content_type = "application/javascript+module"
@@ -129,8 +136,8 @@ resource "cloudflare_worker_version" "api_worker_version" {
       type         = "kv_namespace"
     },
     {
-      name = "MY_ENV_VAR2"
-      text = "some_value"
+      name = "ALLOWED_ORIGINS"
+      text = local.web_url
       type = "plain_text"
     }
   ]
@@ -148,9 +155,32 @@ resource "cloudflare_workers_deployment" "api_deployment" {
 }
 
 resource "cloudflare_workers_custom_domain" "api_workers_custom_domain" {
-  account_id  = var.account_id
-  hostname    = var.api_custom_domain
-  service     = cloudflare_worker.api_worker.name
-  zone_id     = var.main_domain_zone_id
-  count       = var.main_domain_zone_id != null && var.main_domain_zone_id != "" && var.api_custom_domain != null && var.api_custom_domain != "" ? 1 : 0
+  account_id = var.account_id
+  hostname   = var.api_custom_domain
+  service    = cloudflare_worker.api_worker.name
+  zone_id    = var.main_domain_zone_id
+  count      = var.main_domain_zone_id != null && var.main_domain_zone_id != "" && var.api_custom_domain != null && var.api_custom_domain != "" ? 1 : 0
+}
+
+module "web" {
+  source = "../../modules/cloudflare-next-app"
+
+  account_id           = var.account_id
+  cloudflare_api_token = var.cloudflare_api_token
+  worker_name          = "dev-web-next-app"
+  app_path             = "apps/web"
+  repo_root            = "${path.root}/../../.."
+  build_command        = "bunx turbo run build:cf --filter=web"
+  workers_subdomain    = data.external.workers_subdomain.result.subdomain
+
+  env_vars = {
+    NEXT_PUBLIC_SERVER_URL = local.api_url,
+  }
+
+  custom_domain = var.web_custom_domain
+  zone_id       = var.main_domain_zone_id
+
+  depends_on = [cloudflare_workers_deployment.api_deployment]
+
+  environment = "development"
 }
