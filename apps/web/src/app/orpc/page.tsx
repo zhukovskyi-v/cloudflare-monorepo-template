@@ -43,8 +43,8 @@ export default function Page() {
 
     const {data: userData, isFetching: isFetchingUser} = useQuery(
         orpc.users.getUser.queryOptions({
-            input: {id: registerMutation.data?.text},
-            enabled: registerMutation.isSuccess,
+            input: {id: registerMutation.data?.text as string},
+            enabled: !!registerMutation.data?.text,
         })
     );
 
